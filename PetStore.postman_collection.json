@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "40495a0f-efa6-4ec7-8bd4-f2f8f6603e1a",
+		"name": "PetStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22368530"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User is created with correct id\", function (){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    if(pm.expect(jsonData.message).to.eql(\"23592\")){\r",
+							"        pm.collectionVariables.set(\"user_id\", Number(jsonData.message))\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (typeof pm.collectionVariables.get(\"user_id\") !== \"undefined\" && pm.expect(pm.collectionVariables.get(\"user_id\")).not.eql(null)) {\r",
+							"    console.log(\"user_id is \" + pm.collectionVariables.get(\"user_id\"));\r",
+							"    pm.collectionVariables.unset(\"user_id\");\r",
+							"}else{\r",
+							"    console.log(\"user_id has already cleaned\")\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 23592,\r\n  \"username\": \"{{username}}\",\r\n  \"firstName\": \"Yan\",\r\n  \"lastName\": \"Malan\",\r\n  \"email\": \"yan@gmail.com\",\r\n  \"password\": \"12345\",\r\n  \"phone\": \"37533\",\r\n  \"userStatus\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/user",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 800ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Given user's id is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    if(typeof jsonData.id !== \"undefined\" && jsonData.id !== null){\r",
+							"        console.log(\"type of user_id collection's varriable is \" + typeof pm.collectionVariables.get(\"user_id\"));\r",
+							"        console.log(\"type of user_id from json is \" + typeof jsonData.id);\r",
+							"        pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"user_id\"));\r",
+							"    }else\r",
+							"        pm.expect.fail(\"User's id is undefined or same null\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/user/{{username}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Positive Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/user/{{username}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"user",
+						"{{username}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "https://petstore.swagger.io/v2",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "Torez"
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		}
+	]
+}
